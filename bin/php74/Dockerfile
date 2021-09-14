@@ -45,10 +45,13 @@ RUN apt-get -y update && \
 
 # PHP Extensions
 RUN docker-php-ext-install pdo_mysql opcache
+
 RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
+    && docker-php-ext-enable xdebug
+
 RUN pecl install imagick && \
- docker-php-ext-enable imagick \
+ docker-php-ext-enable imagick
+
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
  docker-php-ext-install gd
 
