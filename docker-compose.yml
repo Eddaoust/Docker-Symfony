@@ -25,7 +25,7 @@ services:
       - ./config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
   database:
-    image: mysql:5.7
+    image: mariadb:10.5.12
     container_name: '${PROJECT_NAME}-database'
     restart: 'always'
     ports:
