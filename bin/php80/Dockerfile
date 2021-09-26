@@ -25,8 +25,6 @@ RUN apt-get -y update && \
  xz-utils \
  ca-certificates \
  supervisor \
- nodejs \
- npm \
  openssl \
  fonts-inconsolata \
  fontconfig \
@@ -42,6 +40,11 @@ RUN apt-get -y update && \
  libmagickwand-dev \
  libxext6 \
  libpng-dev
+
+# Install NodeJS & NPM
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+RUN npm install
 
 # PHP Extensions
 RUN docker-php-ext-install pdo_mysql opcache
