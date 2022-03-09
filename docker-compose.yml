@@ -6,9 +6,6 @@ services:
       context: ./bin/${PHP_VERSION}
       args:
         - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION}
-        - PHP_XDEBUG_MODE=${PHP_XDEBUG_MODE}
-        - PHP_XDEBUG_CLIENT_PORT=${PHP_XDEBUG_CLIENT_PORT}
-        - PHP_XDEBUG_CLIENT_HOST=${PHP_XDEBUG_CLIENT_HOST}
         - GIT_MAIL=${GIT_MAIL}
         - GIT_NAME=${GIT_NAME}
     container_name: '${PROJECT_NAME}-php'
@@ -17,7 +14,7 @@ services:
     depends_on:
       - database
     volumes:
-      - ./www:/var/www/html:delegated
+      - ./www:/var/www/html
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
       - ./config/vhosts:/etc/apache2/sites-enabled
       - ./logs/apache2:/var/log/apache2

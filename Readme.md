@@ -1,12 +1,12 @@
-# Symfony Docker Stack
+# 🐳 Symfony Docker Stack
 A complete stack for developing Symfony application.
 * Multiple PHP versions
 * Symfony CLI
 * Supervisor to run async tasks
 * Wkhtmltopdf for generating PDF files
-* MySQL + PhpMyadmin
+* MariaDB + PhpMyadmin
 * Node + NPM for building assets
-* Composer
+* Composer v2
 * [Maildev](https://maildev.github.io/maildev/)
 
 ## Installation

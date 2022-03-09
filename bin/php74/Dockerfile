@@ -39,7 +39,8 @@ RUN apt-get -y update && \
  libxcb1 \
  libmagickwand-dev \
  libxext6 \
- libpng-dev
+ libpng-dev \
+ libzip-dev
 
 # Install NodeJS & NPM
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
@@ -47,7 +48,7 @@ RUN apt-get install -y nodejs
 RUN npm install
 
 # PHP Extensions
-RUN docker-php-ext-install pdo_mysql opcache
+RUN docker-php-ext-install pdo_mysql opcache zip
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
