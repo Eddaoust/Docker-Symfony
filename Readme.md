@@ -22,7 +22,7 @@ $ docker exec -ti eddaoust-php /bin/bash
 ```
 Install Symfony app :
 ```shell
-$ symfony new ./ --full
+$ symfony new ./ --webapp
 ```
 Go to ```http://localhost:8080```
 ## Usage
