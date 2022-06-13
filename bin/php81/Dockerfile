@@ -51,8 +51,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
 # PHP Extensions
 RUN docker-php-ext-install pdo_mysql opcache zip \
  && pecl install xdebug \
-
-RUN pecl install xdebug \
  && docker-php-ext-enable xdebug
 
 RUN pecl install imagick \

@@ -1,4 +1,4 @@
-FROM php:8.0.19-apache-buster
+FROM php:8.2-rc-apache-buster
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -48,9 +48,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
  && npm install
 
 # PHP Extensions
-RUN docker-php-ext-install pdo_mysql opcache zip \
- && pecl install xdebug \
- && docker-php-ext-enable xdebug
+RUN docker-php-ext-install pdo_mysql opcache zip
 
 RUN pecl install imagick \
  && docker-php-ext-enable imagick
