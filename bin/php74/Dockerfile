@@ -47,16 +47,18 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
  && apt-get install -y nodejs \
  && npm install
 
-# PHP Extensions
-RUN docker-php-ext-install pdo_mysql opcache zip \
- && pecl install xdebug \
- && docker-php-ext-enable xdebug
-
 RUN pecl install imagick \
  && docker-php-ext-enable imagick
 
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
  && docker-php-ext-install gd
+
+# PHP Extensions
+RUN docker-php-ext-install pdo_mysql opcache zip \
+ && pecl install xdebug-3.1.3 \
+ && docker-php-ext-enable xdebug \
+ && echo "xdebug.mode=debug,develop" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+ && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Wkhtmltopdf
 RUN curl -L https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb -o wkhtmltox_0.12.5-1.stretch_amd64.deb \
