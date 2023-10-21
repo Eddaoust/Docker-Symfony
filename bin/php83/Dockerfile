@@ -35,6 +35,12 @@ RUN wget https://github.com/symfony-cli/symfony-cli/releases/download/v$SYMFONY_
  && chmod +x symfony \
  && mv symfony /usr/local/bin/
 
+# Git config
+ARG GIT_MAIL
+ARG GIT_NAME
+RUN git config --global user.email $GIT_MAIL  \
+ && git config --global user.name $GIT_NAME
+
 # Cleanup
 RUN rm -rf /usr/src/* \
  && rm -rf /var/lib/apt/lists/*

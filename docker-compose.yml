@@ -23,6 +23,8 @@ services:
       context: ./bin/${PHP_VERSION}
       args:
         - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION}
+        - GIT_MAIL=${GIT_MAIL}
+        - GIT_NAME=${GIT_NAME}
     restart: unless-stopped
     volumes:
       - ./www:/var/www/html
