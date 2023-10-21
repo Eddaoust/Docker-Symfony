@@ -1,30 +1,40 @@
 version: "3.7"
 
 services:
-  webserver:
+  caddy:
+    container_name: caddy
+    image: caddy:2.7.4-alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+      - "8484:443"
+    volumes:
+      - ./config/vhosts/Caddyfile:/etc/caddy/Caddyfile
+      - ./www:/var/www/html
+      - ./logs/caddy/caddy.log:/var/log/caddy.log
+    depends_on:
+      - php-fpm
+      - database
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  php-fpm:
+    container_name: php-fpm
     build:
       context: ./bin/${PHP_VERSION}
       args:
         - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION}
-        - GIT_MAIL=${GIT_MAIL}
-        - GIT_NAME=${GIT_NAME}
-    container_name: '${PROJECT_NAME}-php'
-    ports:
-      - "8080:80"
-    depends_on:
-      - database
+    restart: unless-stopped
     volumes:
       - ./www:/var/www/html
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
-      - ./config/vhosts:/etc/apache2/sites-enabled
-      - ./logs/apache2:/var/log/apache2
+      - ./config/php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
       - ./config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
       - ./config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf
     extra_hosts:
       - host.docker.internal:host-gateway
   database:
-    image: mariadb:10.5.12
-    container_name: '${PROJECT_NAME}-database'
+    image: mariadb:10.11.4
+    container_name: mariadb
     restart: 'always'
     ports:
       - "8181:3306"
@@ -38,7 +48,7 @@ services:
       MYSQL_DATABASE: database
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: '${PROJECT_NAME}-pma'
+    container_name: pma
     depends_on:
       - database
     environment:
@@ -51,7 +61,7 @@ services:
       - "8282:80"
   mail:
     image: maildev/maildev
-    container_name: '${PROJECT_NAME}-mail'
+    container_name: mail
     command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
     restart: always
     ports:
