@@ -1,4 +1,5 @@
-FROM php:8.2-apache-buster
+FROM composer:2.6.2 as composer
+FROM php:8.2-fpm AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -9,59 +10,23 @@ RUN apt-get -y update --fix-missing \
 
 # Install tools & libs
 RUN apt-get -y update \
- && apt-get -y --no-install-recommends install nano \
- wget \
- gnupg2 \
- lsb-release \
- apt-transport-https \
- software-properties-common \
- apt-utils \
- build-essential \
- git \
- curl \
- zip \
- unzip \
- ssl-cert \
- xz-utils \
- ca-certificates \
- supervisor \
- openssl \
- fonts-inconsolata \
- fontconfig \
- xfonts-100dpi \
- xfonts-75dpi \
- xfonts-base \
- fonts-roboto \
- libxrender1 \
- libfreetype6-dev \
- libjpeg62-turbo \
- libx11-6 \
- libxcb1 \
- libmagickwand-dev \
- libxext6 \
- libpng-dev \
- libzip-dev
+ && apt-get -y --no-install-recommends install zip \
+    ca-certificates \
+    curl \
+    nodejs \
+    npm \
+    gnupg \
+    wget \
+    libzip-dev \
+    libicu-dev \
+    supervisor \
+    git
 
-# Install NodeJS & NPM
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
- && apt-get install -y nodejs \
- && npm install
+# Install composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # PHP Extensions
-RUN docker-php-ext-install pdo_mysql opcache zip
-
-RUN pecl install imagick \
- && docker-php-ext-enable imagick
-
-RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
- && docker-php-ext-install gd
-
-# Wkhtmltopdf
-RUN curl -L https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb -o wkhtmltox_0.12.5-1.stretch_amd64.deb \
- && dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb
-
-# Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN docker-php-ext-install pdo_mysql opcache zip intl
 
 # Symfony CLI
 ARG SYMFONY_CLI_VERSION
@@ -75,9 +40,6 @@ ARG GIT_MAIL
 ARG GIT_NAME
 RUN git config --global user.email $GIT_MAIL  \
  && git config --global user.name $GIT_NAME
-
-# Enable apache modules
-RUN a2enmod rewrite headers
 
 # Cleanup
 RUN rm -rf /usr/src/* \

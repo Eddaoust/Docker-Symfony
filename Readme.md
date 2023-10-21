@@ -3,7 +3,6 @@ A complete stack for developing Symfony application.
 * Multiple PHP versions
 * Symfony CLI
 * Supervisor to run async tasks
-* Wkhtmltopdf for generating PDF files
 * MariaDB + PhpMyadmin
 * Node + NPM for building assets
 * Composer v2
@@ -18,7 +17,7 @@ $ docker-compose up -d
 ```
 Connect to Shell inside webserver container :
 ```shell
-$ docker exec -ti eddaoust-php /bin/bash
+$ docker exec -ti php-fpm /bin/bash
 ```
 Install Symfony app :
 ```shell
@@ -41,11 +40,11 @@ MAILER_DSN=smtp://mail:25
 ```
 
 ## Logs
-You can check Apache & Mysql logs in ```/logs```
+You can check Caddy & Mysql logs in ```/logs```
 
 Check container logs :
 ```shell
-$ docker logs -f eddaoust-php
+$ docker logs -f php-fpm
 ```
 
 ## Misc
@@ -66,13 +65,4 @@ $ docker-compose down
 List all containers :
 ```shell
 $ docker ps
-```
-### Apache
-Check server status :
-```shell
-$ /etc/init.d/apache2 status
-```
-Restart server :
-```shell
-$ /etc/init.d/apache2 restart
 ```
