@@ -30,6 +30,8 @@ services:
       - ./www:/var/www/html
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
       - ./config/php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./config/php/fpm.ini:/usr/local/etc/php-fpm.conf
+      - ./config/php/php-jit.ini:/usr/local/etc/php/conf.d/jit.ini
       - ./config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
       - ./config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf
     extra_hosts:
