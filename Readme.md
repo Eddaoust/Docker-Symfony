@@ -13,7 +13,7 @@ Edit the ```.env``` file
 
 Build & run the stack :
 ```shell
-$ docker-compose up -d
+$ docker compose up -d
 ```
 Connect to Shell inside webserver container :
 ```shell
@@ -54,11 +54,11 @@ $ supervisord
 ### Docker
 Rebuild the stack :
 ```shell
-$ docker-compose up --build -d
+$ docker compose up --build -d
 ```
 Stop the stack :
 ```shell
-$ docker-compose down
+$ docker compose down
 ```
 List all containers :
 ```shell
