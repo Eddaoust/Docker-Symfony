@@ -1,4 +1,4 @@
-FROM composer:2.6.2 as composer
+FROM composer:2.8 as composer
 FROM php:8.2-fpm AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -20,13 +20,21 @@ RUN apt-get -y update \
     libzip-dev \
     libicu-dev \
     supervisor \
-    git
+    git \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libwebp-dev \
+    libmagickwand-dev
 
 # Install composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # PHP Extensions
 RUN docker-php-ext-install pdo_mysql opcache zip intl
+
+RUN pecl install imagick && \
+ docker-php-ext-enable imagick
 
 # Symfony CLI
 ARG SYMFONY_CLI_VERSION
