@@ -4,7 +4,7 @@ A complete stack for developing Symfony application.
 * Symfony CLI
 * Supervisor to run async tasks
 * MariaDB
-* Node + NPM for building assets
+* Node(18) + NPM(9) for building assets
 * Composer v2
 * [Maildev](https://maildev.github.io/maildev/)
 
