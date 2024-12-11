@@ -50,19 +50,6 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: database
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: pma
-    depends_on:
-      - database
-    environment:
-      - PMA_ARBITRARY=1
-      - UPLOAD_LIMIT=300M
-      - PMA_HOST=database
-      - PMA_USER=root
-      - PMA_PASSWORD=root
-    ports:
-      - "8282:80"
   mail:
     image: maildev/maildev
     container_name: mail

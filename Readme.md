@@ -3,7 +3,7 @@ A complete stack for developing Symfony application.
 * Multiple PHP versions
 * Symfony CLI
 * Supervisor to run async tasks
-* MariaDB + PhpMyadmin
+* MariaDB
 * Node + NPM for building assets
 * Composer v2
 * [Maildev](https://maildev.github.io/maildev/)
@@ -26,8 +26,6 @@ $ symfony new ./ --webapp
 Go to ```http://localhost:8080```
 ## Usage
 Access to your app ```http://localhost:8080```
-
-Access to PHPMyAdmin ```http://localhost:8282```
 
 Access to Maildev ```http://localhost:8383```
 
