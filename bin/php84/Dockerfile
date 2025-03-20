@@ -1,5 +1,5 @@
 FROM composer:2.8 AS composer
-FROM php:8.3-fpm-bookworm AS base
+FROM php:8.4-fpm-bookworm AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
