@@ -1,7 +1,7 @@
 services:
   caddy:
     volumes:
-      - .docker/config/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./docker/config/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./:/var/www/html
     ports:
       - "8080:80"
@@ -13,9 +13,9 @@ services:
       - host.docker.internal:host-gateway
     volumes:
       - ./:/var/www/html
-      - .docker/config/php/php.ini:/usr/local/etc/php/php.ini:ro
-      - .docker/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
-      - .docker/config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf:ro
+      - ./docker/config/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./docker/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
+      - ./docker/config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf:ro
   mail:
     image: maildev/maildev
     container_name: mail

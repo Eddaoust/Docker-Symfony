@@ -1,18 +1,20 @@
 #!/bin/sh
 set -e
+set -x
 
-if [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
-	# Install the project the first time PHP is started
-	# After the installation, the following block can be deleted
-	if [ ! -f composer.json ]; then
-		rm -Rf tmp/
-		composer create-project "symfony/skeleton $SYMFONY_VERSION" tmp --stability="$STABILITY" --prefer-dist --no-progress --no-interaction --no-install
-
-		cd tmp
-		cp -Rp . ..
-		cd -
-		rm -Rf tmp/
+if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
+  if [ ! -f composer.json ]; then
+    rm -Rf tmp/
+    symfony new tmp --version="$SYMFONY_VERSION" --no-git --webapp
+    cd tmp
+    cp -Rp . ..
+    cd -
+    rm -Rf tmp/
   fi
+
+  # Display information about the current project
+  # Or about an error in project initialization
+  php bin/console -V
 fi
 
-exec docker-php-entrypoint "$@"
+exec "$@"

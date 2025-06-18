@@ -4,15 +4,21 @@ services:
     image: caddy:2.7.4-alpine
     restart: unless-stopped
     depends_on:
-      - php-fpm
+      - php
       - database
-  php-fpm:
-    container_name: php-fpm
+  php:
+    container_name: php
     build:
-      context: .docker/bin/${PHP_VERSION:-php84}
+      context: ./docker
+      dockerfile: bin/${PHP_VERSION:-php84}/Dockerfile
+      args:
+        - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION:-5.12.0}
     restart: unless-stopped
     env_file:
       - .env.docker
+    environment:
+      SYMFONY_VERSION: ${SYMFONY_VERSION:-7.3.*}
+      STABILITY: ${STABILITY:-stable}
   database:
     image: mariadb:10.11.4
     container_name: mariadb

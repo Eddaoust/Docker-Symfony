@@ -17,10 +17,11 @@ RUN apt-get -y update \
     npm \
     gnupg \
     wget \
+    zip \
+    unzip \
     libzip-dev \
     libicu-dev \
     supervisor \
-    git \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -29,6 +30,19 @@ RUN apt-get -y update \
 
 # Install composer
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+# Symfony CLI
+ARG SYMFONY_CLI_VERSION
+RUN wget https://github.com/symfony-cli/symfony-cli/releases/download/v$SYMFONY_CLI_VERSION/symfony-cli_linux_amd64.tar.gz \
+ && tar -xvzf symfony-cli_linux_amd64.tar.gz \
+ && chmod +x symfony \
+ && mv symfony /usr/local/bin/
+
+# Copy custom entrypoint script into the image
+COPY --link --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+# Set it as the container entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["php-fpm"]
 
 # PHP Extensions
 RUN docker-php-ext-install pdo_mysql opcache zip intl
