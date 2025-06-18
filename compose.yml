@@ -3,13 +3,15 @@ services:
     container_name: caddy
     image: caddy:2.7.4-alpine
     restart: unless-stopped
+    environment:
+      - APP_ENV=prod
+      - API_URL=https://api.example.com
     ports:
       - "8080:80"
       - "8484:443"
     volumes:
       - ./config/vhosts/Caddyfile:/etc/caddy/Caddyfile
       - ./www:/var/www/html
-      - ./logs/caddy/caddy.log:/var/log/caddy.log
     depends_on:
       - php-fpm
       - database
@@ -19,17 +21,10 @@ services:
     container_name: php-fpm
     build:
       context: ./bin/${PHP_VERSION}
-      args:
-        - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION}
-        - GIT_MAIL=${GIT_MAIL}
-        - GIT_NAME=${GIT_NAME}
     restart: unless-stopped
     volumes:
       - ./www:/var/www/html
       - ./config/php/php.ini:/usr/local/etc/php/php.ini
-      - ./config/php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
-      - ./config/php/fpm.ini:/usr/local/etc/php-fpm.conf
-      - ./config/php/php-jit.ini:/usr/local/etc/php/conf.d/jit.ini
       - ./config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
       - ./config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf
     extra_hosts:

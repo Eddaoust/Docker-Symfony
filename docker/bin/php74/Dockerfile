@@ -1,5 +1,6 @@
+# This one run on Debian 11 Bullseye
 FROM composer:2.8 AS composer
-FROM php:8.2-fpm AS base
+FROM php:7.4-fpm AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -39,19 +40,6 @@ RUN pecl install imagick && \
 # Install GD
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
  && docker-php-ext-install gd
-
-# Symfony CLI
-ARG SYMFONY_CLI_VERSION
-RUN wget https://github.com/symfony-cli/symfony-cli/releases/download/v$SYMFONY_CLI_VERSION/symfony-cli_linux_amd64.tar.gz \
- && tar -xvzf symfony-cli_linux_amd64.tar.gz \
- && chmod +x symfony \
- && mv symfony /usr/local/bin/
-
-# Git config
-ARG GIT_MAIL
-ARG GIT_NAME
-RUN git config --global user.email $GIT_MAIL  \
- && git config --global user.name $GIT_NAME
 
 # Cleanup
 RUN rm -rf /usr/src/* \
