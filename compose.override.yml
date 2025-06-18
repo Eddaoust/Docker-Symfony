@@ -1,0 +1,29 @@
+services:
+  caddy:
+    volumes:
+      - .docker/config/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+      - "8484:443"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+  php:
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./:/var/www/html
+      - .docker/config/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - .docker/config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf:ro
+      - .docker/config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf:ro
+  mail:
+    image: maildev/maildev
+    container_name: mail
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    restart: always
+    ports:
+      - "8383:80"
+      - "25:25"
+  database:
+    ports:
+      - "8181:3306"

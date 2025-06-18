@@ -3,51 +3,26 @@ services:
     container_name: caddy
     image: caddy:2.7.4-alpine
     restart: unless-stopped
-    environment:
-      - APP_ENV=prod
-      - API_URL=https://api.example.com
-    ports:
-      - "8080:80"
-      - "8484:443"
-    volumes:
-      - ./config/vhosts/Caddyfile:/etc/caddy/Caddyfile
-      - ./www:/var/www/html
     depends_on:
       - php-fpm
       - database
-    extra_hosts:
-      - host.docker.internal:host-gateway
   php-fpm:
     container_name: php-fpm
     build:
-      context: ./bin/${PHP_VERSION}
+      context: .docker/bin/${PHP_VERSION:-php84}
     restart: unless-stopped
-    volumes:
-      - ./www:/var/www/html
-      - ./config/php/php.ini:/usr/local/etc/php/php.ini
-      - ./config/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
-      - ./config/supervisor/supervisord-programs.conf:/etc/supervisor/conf.d/app.conf
-    extra_hosts:
-      - host.docker.internal:host-gateway
+    env_file:
+      - .env.docker
   database:
     image: mariadb:10.11.4
     container_name: mariadb
     restart: 'always'
-    ports:
-      - "8181:3306"
     volumes:
-      - ./data/mysql:/var/lib/mysql
-      - ./logs/mysql:/var/log/mysql
+      - database_data:/var/lib/mysql:rw
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: database
-  mail:
-    image: maildev/maildev
-    container_name: mail
-    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
-    restart: always
-    ports:
-      - "8383:80"
-      - "25:25"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-database}
+volumes:
+  database_data:
