@@ -9,10 +9,10 @@ services:
   php:
     container_name: php
     build:
-      context: ./docker
-      dockerfile: bin/${PHP_VERSION:-php84}/Dockerfile
+      context: ./
       args:
         - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION:-5.12.0}
+        - PHP_VERSION=${PHP_VERSION:-8.4}
     restart: unless-stopped
     env_file:
       - .env.docker

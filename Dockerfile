@@ -1,5 +1,6 @@
+ARG PHP_VERSION
 FROM composer:2.8 AS composer
-FROM php:8.4-fpm-bookworm AS base
+FROM php:$PHP_VERSION-fpm-bookworm AS base
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -39,7 +40,7 @@ RUN wget https://github.com/symfony-cli/symfony-cli/releases/download/v$SYMFONY_
  && mv symfony /usr/local/bin/
 
 # Copy custom entrypoint script into the image
-COPY --link --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --link --chmod=755 /docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 # Set it as the container entrypoint
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["php-fpm"]
