@@ -2,7 +2,7 @@ localhost:80 {
     root * /var/www/html/public
     file_server
     encode gzip zstd
-    php_fastcgi php-fpm:9000
+    php_fastcgi php:9000
     log {
           output file /var/log/caddy.log
           format console

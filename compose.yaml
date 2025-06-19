@@ -1,0 +1,34 @@
+services:
+  caddy:
+    container_name: caddy
+    image: caddy:2.7.4-alpine
+    restart: unless-stopped
+    depends_on:
+      - php
+      - database
+  php:
+    container_name: php
+    build:
+      context: ./
+      args:
+        - SYMFONY_CLI_VERSION=${SYMFONY_CLI_VERSION:-5.12.0}
+        - PHP_VERSION=${PHP_VERSION:-8.4}
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    environment:
+      SYMFONY_VERSION: ${SYMFONY_VERSION:-7.3.*}
+      STABILITY: ${STABILITY:-stable}
+  database:
+    image: mariadb:10.11.4
+    container_name: mariadb
+    restart: 'always'
+    volumes:
+      - database_data:/var/lib/mysql:rw
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${MYSQL_USER:-user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-database}
+volumes:
+  database_data:
